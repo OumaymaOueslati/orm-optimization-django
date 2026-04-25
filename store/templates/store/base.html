@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>ORM Project</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        h1 { color: #333; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; color: white; }
+        .badge-slow { background: #e74c3c; }
+        .badge-fast { background: #27ae60; }
+        .stats { background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .stats-fast { background: #d4edda; border: 1px solid #28a745; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        th { background: #343a40; color: white; padding: 12px; text-align: left; }
+        td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f8f9fa; }
+        .nav { margin-bottom: 20px; }
+        .nav a { display: inline-block; padding: 10px 20px; margin-right: 10px; color: white; text-decoration: none; border-radius: 5px; }
+        .nav a.slow { background: #e74c3c; }
+        .nav a.fast { background: #27ae60; }
+        .timing { font-size: 24px; font-weight: bold; color: #e74c3c; }
+        .timing-fast { font-size: 24px; font-weight: bold; color: #27ae60; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/store/orders-slow/" class="slow">🐌 Version LENTE</a>
+        <a href="/store/orders-fast/" class="fast">⚡ Version RAPIDE</a>
+    </div>
+    {% block content %}{% endblock %}
+</body>
+</html>

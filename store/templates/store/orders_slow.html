@@ -1,0 +1,38 @@
+{% extends "store/base.html" %}
+{% block content %}
+
+<h1>🐌 Liste des commandes <span class="badge badge-slow">VERSION LENTE</span></h1>
+
+<div class="stats">
+    <h3>📊 Statistiques de performance</h3>
+    <p>⏱️ Temps d'exécution : <span class="timing">{{ execution_time }} ms</span></p>
+    <p>🔴 Nombre de requêtes SQL : <strong style="color:red; font-size:20px;">{{ query_count }}</strong></p>
+    <p>⚠️ Problème : <strong>N+1</strong> — Pour chaque commande, Django fait une requête séparée pour le client ET pour chaque produit !</p>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Client</th>
+            <th>Ville</th>
+            <th>Statut</th>
+            <th>Nb Produits</th>
+            <th>Total (€)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.customer.name }}</td>
+            <td>{{ order.customer.city }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.nb_items }}</td>
+            <td><strong>{{ order.computed_total }} €</strong></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

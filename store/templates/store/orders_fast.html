@@ -1,0 +1,38 @@
+{% extends "store/base.html" %}
+{% block content %}
+
+<h1>⚡ Liste des commandes <span class="badge badge-fast">VERSION RAPIDE</span></h1>
+
+<div class="stats-fast">
+    <h3>📊 Statistiques de performance</h3>
+    <p>⏱️ Temps d'exécution : <span class="timing-fast">{{ execution_time }} ms</span></p>
+    <p>🟢 Nombre de requêtes SQL : <strong style="color:green; font-size:20px;">{{ query_count }}</strong></p>
+    <p>✅ Optimisé avec : <strong>select_related + prefetch_related + annotate</strong></p>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Client</th>
+            <th>Ville</th>
+            <th>Statut</th>
+            <th>Nb Produits</th>
+            <th>Total (€)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.customer.name }}</td>
+            <td>{{ order.customer.city }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.nb_items }}</td>
+            <td><strong>{{ order.computed_total }} €</strong></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

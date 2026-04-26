@@ -13,7 +13,7 @@ class Command(BaseCommand):
         self.stdout.write('Génération des données...')
 
         # 500 clients
-        customers = []
+        customers = []   #Tu prépares 500 objets,Tu les envoies en base en une seule fois avec bulk_create() pour éviter les requêtes individuelles
         for _ in range(500):
             customers.append(Customer(
                 name=fake.name(),
@@ -29,8 +29,8 @@ class Command(BaseCommand):
         for _ in range(100):
             products.append(Product(
                 name=fake.word().capitalize() + ' ' + fake.word(),
-                price=Decimal(str(round(random.uniform(5, 500), 2))),
-                stock=random.randint(0, 1000),
+                price=Decimal(str(round(random.uniform(5, 500), 2))), # Génère un nombre flottant (float) aléatoire entre 5 et 500. Arrondit ce nombre à 2 décimales, puis le convertit en une instance de Decimal pour une meilleure précision dans les calculs financiers.
+                stock=random.randint(0, 1000),# Génère un nombre entier aléatoire entre 0 et 1000 pour représenter la quantité en stock du produit.
                 category=random.choice(categories),
             ))
         Product.objects.bulk_create(products)

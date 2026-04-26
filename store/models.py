@@ -3,9 +3,9 @@ from django.db import models
 
 class Customer(models.Model):
     name = models.CharField(max_length=200)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True) #L'email doit être unique pour éviter les doublons
     city = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True) #Enregistre automatiquement la date et l'heure de création du client
 
     def __str__(self):
         return self.name
@@ -33,12 +33,12 @@ class Order(models.Model):
         ('shipped', 'Shipped'),
         ('delivered', 'Delivered'),
     ]
-    customer = models.ForeignKey(
+    customer = models.ForeignKey(  #Un client peut avoir plusieurs commandes, mais une commande appartient à un seul client. C'est une relation de type "ForeignKey" (clé étrangère) dans Django.
         Customer,
-        on_delete=models.CASCADE,
-        related_name='orders'
+        on_delete=models.CASCADE, #Si un client est supprimé, toutes ses commandes seront également supprimées (cascade delete).
+        related_name='orders' #Permet d'accéder aux commandes d'un client via l'attribut "orders" (ex: customer.orders.all())
     )
-    status = models.CharField(
+    status = models.CharField( 
         max_length=20,
         choices=STATUS_CHOICES,
         default='pending',
@@ -55,21 +55,21 @@ class Order(models.Model):
     class Meta:
         indexes = [
             models.Index(
-                fields=['-created_at', 'status'],
+                fields=['-created_at', 'status'], #- created_at signifie ordre décroissant 
                 name='idx_order_created_status'
             ),
         ]
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(
+    order = models.ForeignKey(  #Une commande peut avoir plusieurs items, mais un item appartient à une seule commande. C'est une relation de type "ForeignKey" (clé étrangère) dans Django.
         Order,
         on_delete=models.CASCADE,
         related_name='items'
     )
-    product = models.ForeignKey(
+    product = models.ForeignKey( 
         Product,
-        on_delete=models.CASCADE,
+        on_delete=models.CASCADE, 
         related_name='order_items'
     )
     quantity = models.IntegerField(default=1)

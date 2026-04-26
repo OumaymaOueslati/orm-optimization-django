@@ -1,8 +1,8 @@
 import os
 import django
-import time
-import threading
-import tracemalloc
+import time # mesure le temps d'exécution
+import threading # permet de lancer plusieurs tâches en parallèle
+import tracemalloc # mesure la mémoire RAM utilisée par Python
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'orm_project.settings')
 django.setup()
@@ -14,9 +14,9 @@ from store.models import Order
 
 def analyze_slow():
     """Analyse version lente — N+1"""
-    tracemalloc.start()
-    reset_queries()
-    start = time.time()
+    tracemalloc.start() #démarre le "surveillant" de mémoire
+    reset_queries() #réinitialise le compteur de requêtes SQL pour avoir une mesure précise
+    start = time.time() #enregistre le temps de départ pour calculer la durée d'exécution à la fin
 
     orders = list(Order.objects.all()[:100])
     for order in orders:
@@ -30,8 +30,8 @@ def analyze_slow():
         order.computed_total = round(total, 2)
 
     duration = round((time.time() - start) * 1000, 2)
-    query_count = len(connection.queries)
-    current, peak = tracemalloc.get_traced_memory()
+    query_count = len(connection.queries) #compte combien de requêtes SQL ont été exécutées pendant ce processus
+    current, peak = tracemalloc.get_traced_memory() # lit la mémoire utilisée 
     tracemalloc.stop()
 
     print("\n" + "="*60)
@@ -99,22 +99,22 @@ def analyze_lock_contention():
         from django.db import transaction
         start = time.time()
         try:
-            with transaction.atomic():
+            with transaction.atomic(): ##démarre une transaction
                 # Simule une lecture avec lock
-                order = Order.objects.select_for_update().first()
-                time.sleep(0.01)  # simule un traitement
-                duration = round((time.time() - start) * 1000, 2)
+                order = Order.objects.select_for_update().first() # pose un LOCK sur la ligne
+                time.sleep(0.01)  # simule un traitement de 10 ms
+                duration = round((time.time() - start) * 1000, 2)  # "tu calcules combien de millisecondes le thread a pris"
                 with lock:
                     times.append(duration)
         except Exception as e:
             with lock:
                 errors.append(str(e))
 
-    threads = [threading.Thread(target=worker, args=(i,)) for i in range(10)]
+    threads = [threading.Thread(target=worker, args=(i,)) for i in range(10)] #target=worker → fonction à exécuter dans chaque thread, args=(i,) → arguments à passer à la fonction worker (ici l'identifiant du thread)
     for t in threads:
-        t.start()
+        t.start() #lance les 10 threads en parallèle
     for t in threads:
-        t.join()
+        t.join() #attend que tous les threads aient terminé
 
     print(f"Threads réussis  : {len(times)}/10")
     print(f"Erreurs de lock  : {len(errors)}")

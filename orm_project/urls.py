@@ -5,5 +5,5 @@ import debug_toolbar
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('store/', include('store.urls')),
-    path('__debug__/', include(debug_toolbar.urls)),
+    path('__debug__/', include(debug_toolbar.urls)), # L'activation de la Django Debug Toolbar.
 ]
